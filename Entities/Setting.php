@@ -6,10 +6,11 @@ use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Media\Support\Traits\MediaRelation;
 use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
+use Modules\Core\Icrud\Traits\HasCacheClearable;
 
 class Setting extends Model
 {
-    use Translatable, MediaRelation, BelongsToTenant;
+    use Translatable, MediaRelation, BelongsToTenant, HasCacheClearable;
 
     public $translatedAttributes = ['value', 'description'];
 
@@ -37,4 +38,13 @@ class Setting extends Model
             return $this->translate($locale)->value;
         });
     }
+
+  public function getCacheClearableData()
+  {
+    return [
+      'cdn' => [
+        config("app.url")
+      ]
+    ];
+  }
 }
